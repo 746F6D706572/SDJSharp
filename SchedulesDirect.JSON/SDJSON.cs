@@ -13,115 +13,15 @@ using System.Globalization;
 
 namespace SchedulesDirect
 {
-    public partial class SDJson
+    public partial class SDJson : SDJsonCore
     {
-#if DEBUG
-        private static readonly string DEBUG_FILE = "SDGrabSharp.debug.txt";
-#endif
         private string loginToken;
-        private readonly List<SDJsonError> localErrors;
-        private static readonly string urlBase = "https://json.schedulesdirect.org/20141201/";
-        private static readonly string userAgentDefault = "SDJSharp JSON C# Library/1.0 (https://github.com/M0OPK/SDJSharp)";
-        private static readonly string userAgentShort = "SDJSharp JSON C# Library/1.0";
-        private static string userAgentFull;
 
-        public SDJson(string clientUserAgent = "", string token = "")
-        {
+        public SDJson(string clientUserAgent = "", string token = "") : base(clientUserAgent) {            
             localErrors = new List<SDJsonError>();
-            userAgentFull = clientUserAgent == string.Empty ? userAgentDefault : $"{userAgentShort} ({clientUserAgent})";
-
             // If token supplied, use it
             if (token != string.Empty)
                 loginToken = token;
-        }
-
-        /// <summary>
-        /// Return raw error details (if any)
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<SDJsonError> GetRawErrors()
-        {
-            return localErrors.AsEnumerable();
-        }
-
-        /// <summary>
-        /// Return true if there are errors to report
-        /// </summary>
-        public bool HasErrors => localErrors.Count > 0;
-
-        /// <summary>
-        /// Retrieve the most recent reported error. If specified pop (remove) after returning
-        /// </summary>
-        /// <param name="pop"></param>
-        /// <returns></returns>
-        public SDJsonError GetLastError(bool pop = true)
-        {
-            var thisError = localErrors.Last();
-            if (pop)
-                localErrors.Remove(thisError);
-            return thisError;
-        }
-
-        /// <summary>
-        /// Clear any errors
-        /// </summary>
-        public void ClearErrors()
-        {
-            localErrors.Clear();
-        }
-
-        private void addError(Exception ex)
-        {
-            localErrors.Add(new SDJsonError(ex));
-        }
-
-        private void addError(int errorcode, string errormessage, SDJsonError.ErrorSeverity errorseverity = SDJsonError.ErrorSeverity.Error, string errordescription = "", string errorsource = "")
-        {
-            localErrors.Add(new SDJsonError(errorcode, errormessage, errorseverity, errordescription, errorsource));
-        }
-
-        /// <summary>
-        /// Schedules Direct Error Structure
-        /// </summary>
-        public class SDJsonError
-        {
-            public Exception exception;
-            public bool isException;
-            public int code;
-            public string message;
-            public string description;
-            public string source;
-            public ErrorSeverity severity;
-
-            public enum ErrorSeverity
-            {
-                Info,
-                Warning,
-                Error,
-                Fatal
-            }
-
-            public SDJsonError(Exception ex)
-            {
-                isException = true;
-                exception = ex;
-                code = ex.HResult;
-                message = ex.Message;
-                description = ex.StackTrace;
-                source = ex.Source;
-                severity = ErrorSeverity.Fatal;
-            }
-
-            public SDJsonError(int errorcode, string errormessage, ErrorSeverity errorseverity = ErrorSeverity.Error, string errordescription = "", string errorsource = "")
-            {
-                isException = false;
-                exception = null;
-                code = errorcode;
-                message = errormessage;
-                description = errordescription;
-                source = errorsource;
-                severity = errorseverity;
-            }
         }
 
         /// <summary>
@@ -612,197 +512,98 @@ namespace SchedulesDirect
             return null;
         }
 
-        // For cases where we can't create a known object type
-        // Parse JSON string and return dynamic type
-        private dynamic GetDynamic(string jsonstring)
-        {
-            var ser = new JavaScriptSerializer();
-            return ser.Deserialize<dynamic>(jsonstring);
+
+
+
+
+
+        private readonly List<SDJsonError> localErrors;
+
+
+        /// <summary>
+        /// Return raw error details (if any)
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<SDJsonError> GetRawErrors() {
+            return localErrors.AsEnumerable();
         }
 
-        // Parse known class object and return JSON string
-        private string CreateJSONstring<T>(T obj)
-        {
-            var jsonStream = new MemoryStream();
-            var jsonSer = new DataContractJsonSerializer(typeof(T), new DataContractJsonSerializerSettings
-            {
-                DateTimeFormat = new DateTimeFormat("yyyy-MM-ddTHH:mm:ssZ"),
-            });
-            jsonSer.WriteObject(jsonStream, obj);
+        /// <summary>
+        /// Return true if there are errors to report
+        /// </summary>
+        public bool HasErrors => localErrors.Count > 0;
 
-            jsonStream.Position = 0;
-            var sr = new StreamReader(jsonStream);
-            return sr.ReadToEnd();
+        /// <summary>
+        /// Retrieve the most recent reported error. If specified pop (remove) after returning
+        /// </summary>
+        /// <param name="pop"></param>
+        /// <returns></returns>
+        public SDJsonError GetLastError(bool pop = true) {
+            var thisError = localErrors.Last();
+            if (pop)
+                localErrors.Remove(thisError);
+            return thisError;
         }
 
-        // Parse JSON string and return known class object
-        private T ParseJSON<T>(string input)
-        {
-            if (input == string.Empty)
-                return default(T);
-
-            var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes(input));
-            var jsonSer = new DataContractJsonSerializer(typeof(T), new DataContractJsonSerializerSettings
-            {
-                DateTimeFormat = new DateTimeFormat("yyyy-MM-ddTHH:mm:ssZ"),
-            });
-
-            return (T)jsonSer.ReadObject(jsonStream);
+        /// <summary>
+        /// Clear any errors
+        /// </summary>
+        public void ClearErrors() {
+            localErrors.Clear();
         }
 
-        // Parse incoming known object with JSON serializer.
-        // Perform post action and parse response via JSON serializer to known object type
-        private V PostJSON<V, T>(string command, T obj, string token = "", WebHeaderCollection headers = null)
-        {
-            var requestString = CreateJSONstring(obj);
-#if DEBUG
-            DebugLog($"JSON Post [{command}] Request: {requestString}{Environment.NewLine}");
-#endif
-            var response = WebPost(command, requestString, token, headers);
-            var result = ParseJSON<V>(response);
-#if DEBUG
-            DebugLog($"JSON Post Response: {response}{Environment.NewLine}");
-#endif
-            return result;
+        private void addError(Exception ex) {
+            localErrors.Add(new SDJsonError(ex));
         }
 
-        // Perform get action and parse response via JSON serializer to known object type
-        private T GetJSON<T>(string command, string token = "", WebHeaderCollection headers = null)
-        {
-            return ParseJSON<T>(WebGet(command, token, headers));
-        }
-
-        // Perform put action and parse response via JSON serializer to known object type
-        private T PutJSON<T>(string command, string token = "", WebHeaderCollection headers = null)
-        {
-            return ParseJSON<T>(WebPut(command, token, headers));
-        }
-
-        private T DeleteJSON<T>(string command, string token = "", WebHeaderCollection headers = null)
-        {
-            return ParseJSON<T>(WebDelete(command, token, headers));
-        }
-
-        // Handle get request, return response as string
-        private string WebGet(string command, string token = "", WebHeaderCollection headers = null)
-        {
-            var getRequest = WebAction(urlBase + command, "GET", token, headers);
-
-            try
-            {
-                var resp = (HttpWebResponse)getRequest.GetResponse();
-                using (var sr = new StreamReader(resp.GetResponseStream()))
-                {
-                    return sr.ReadToEnd();
-                }
-            }
-            catch (System.Exception ex)
-            {
-                queueError(ex);
-                return "";
-            }
-        }
-
-        // Handle put request, return response as string
-        private string WebPut(string command, string token = "", WebHeaderCollection headers = null)
-        {
-            var putRequest = WebAction(urlBase + command, "PUT", token, headers);
-
-            try
-            {
-                putRequest.Timeout = 5000;
-                var resp = (HttpWebResponse)putRequest.GetResponse();
-                using (var sr = new StreamReader(resp.GetResponseStream()))
-                {
-                    return sr.ReadToEnd();
-                }
-            }
-            catch (System.Exception ex)
-            {
-                queueError(ex);
-                return "";
-            }
-        }
-
-        // Handle delete request, return response as string
-        private string WebDelete(string command, string token = "", WebHeaderCollection headers = null)
-        {
-            var deleteRequest = WebAction(urlBase + command, "DELETE", token, headers);
-
-            try
-            {
-                deleteRequest.Timeout = 5000;
-                var resp = (HttpWebResponse)deleteRequest.GetResponse();
-                using (var sr = new StreamReader(resp.GetResponseStream()))
-                {
-                    return sr.ReadToEnd();
-                }
-            }
-            catch (System.Exception ex)
-            {
-                queueError(ex);
-                return "";
-            }
-        }
-
-        // Handle post request, return response as string
-        private string WebPost(string command, string jsonstring, string token = "", WebHeaderCollection headers = null)
-        {
-            var postRequest = WebAction(urlBase + command, "POST", token, headers);
-
-            using (var sr = new StreamWriter(postRequest.GetRequestStream()))
-            {
-                sr.Write(jsonstring);
-                sr.Flush();
-            }
-
-            try
-            {
-                var resp = (HttpWebResponse)postRequest.GetResponse();
-                using (var sr = new StreamReader(resp.GetResponseStream()))
-                {
-                    return sr.ReadToEnd();
-                }
-            }
-            catch(Exception ex)
-            {
-                addError(ex);
-                return "";
-            }
-        }
-
-        // Create web request for specified action and URL
-        private HttpWebRequest WebAction(string url, string action = "GET", string token = "", WebHeaderCollection headers = null)
-        {
-            var webRequest = (HttpWebRequest)WebRequest.Create(url);
-            webRequest.Method = action;
-            webRequest.ContentType = "application/json; charset=utf-8";
-            webRequest.Accept = "application/json; charset=utf-8";
-            webRequest.UserAgent = userAgentFull;
-            webRequest.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            if (headers != null)
-                webRequest.Headers = headers;
-
-            if (token != "")
-                webRequest.Headers.Add("token: " + token);
-
-            return webRequest;
+        private void addError(int errorcode, string errormessage, SDJsonError.ErrorSeverity errorseverity = SDJsonError.ErrorSeverity.Error, string errordescription = "", string errorsource = "") {
+            localErrors.Add(new SDJsonError(errorcode, errormessage, errorseverity, errordescription, errorsource));
         }
 
         // Queue exception to local errors
         // @Todo: Create local error class, encompassing local errors and exceptions
-        private void queueError(Exception ex)
-        {
+        private void queueError(Exception ex) {
             addError(ex);
         }
 
-#if DEBUG
-        private void DebugLog(string debugText)
-        {
-            string logStamp = DateTime.Now.ToString("O");
-            File.AppendAllText(DEBUG_FILE, $"{logStamp}: {debugText}");
+        /// <summary>
+        /// Schedules Direct Error Structure
+        /// </summary>
+        public class SDJsonError {
+            public Exception exception;
+            public bool isException;
+            public int code;
+            public string message;
+            public string description;
+            public string source;
+            public ErrorSeverity severity;
+
+            public enum ErrorSeverity {
+                Info,
+                Warning,
+                Error,
+                Fatal
+            }
+
+            public SDJsonError(Exception ex) {
+                isException = true;
+                exception = ex;
+                code = ex.HResult;
+                message = ex.Message;
+                description = ex.StackTrace;
+                source = ex.Source;
+                severity = ErrorSeverity.Fatal;
+            }
+
+            public SDJsonError(int errorcode, string errormessage, ErrorSeverity errorseverity = ErrorSeverity.Error, string errordescription = "", string errorsource = "") {
+                isException = false;
+                exception = null;
+                code = errorcode;
+                message = errormessage;
+                description = errordescription;
+                source = errorsource;
+                severity = errorseverity;
+            }
         }
-#endif
     }
 }

@@ -98,7 +98,7 @@
     <ProjectReference Include="..\SchedulesDirect.JSON\SchedulesDirect.JSON.csproj">
       <Project>{e9b12afd-9cd6-4315-8999-2ea2f51ddebc}</Project>
       <Name>SchedulesDirect.JSON</Name>
-      <Private>False</Private>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
