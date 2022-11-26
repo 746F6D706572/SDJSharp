@@ -31,8 +31,8 @@ namespace SDGrabSharp.Common
                 public int priority;
                 public DateTime retryTimeUtc;
                 public string stationContext;
-                public IEnumerable<SDMD5Request> md5Request;
-                public IEnumerable<SDScheduleRequest> scheduleRequest;
+                public IEnumerable<SDStationMD5Request> md5Request;
+                public IEnumerable<SDStationScheduleRequest> scheduleRequest;
                 public string[] programmeRequest;
 
                 public object Clone()
@@ -56,10 +56,10 @@ namespace SDGrabSharp.Common
                 config = configObject;
             }
 
-            public void AddRequest(IEnumerable<SDMD5Request> md5Request, string stationContext = null, 
+            public void AddRequest(IEnumerable<SDStationMD5Request> md5Request, string stationContext = null, 
                                    DateTime? retryTime = null, int priority = 5)
             {
-                var splitRequest = splitArray<SDMD5Request>(md5Request.ToArray(), config.ScheduleRetrievalItems);
+                var splitRequest = splitArray<SDStationMD5Request>(md5Request.ToArray(), config.ScheduleRetrievalItems);
                 foreach (var thisSplit in splitRequest)
                 {
                     if (thisSplit.Length > 0)
@@ -78,10 +78,10 @@ namespace SDGrabSharp.Common
                 }
             }
 
-            public void AddRequest(IEnumerable<SDScheduleRequest> scheduleRequest, string stationContext = null,
+            public void AddRequest(IEnumerable<SDStationScheduleRequest> scheduleRequest, string stationContext = null,
                                    DateTime? retryTime = null, int priority = 5)
             {
-                var splitRequest = splitArray<SDScheduleRequest>(scheduleRequest.ToArray(), config.ScheduleRetrievalItems);
+                var splitRequest = splitArray<SDStationScheduleRequest>(scheduleRequest.ToArray(), config.ScheduleRetrievalItems);
                 foreach (var thisSplit in splitRequest)
                 {
                     if (thisSplit.Length > 0)
@@ -159,10 +159,10 @@ namespace SDGrabSharp.Common
             }
             public class MD5ResultPair
             {
-                public SDMD5Request md5Request;
-                public readonly SDMD5Response md5Response;
+                public SDStationMD5Request md5Request;
+                public readonly SDStationMD5Response md5Response;
 
-                public MD5ResultPair(SDMD5Request request, SDMD5Response response)
+                public MD5ResultPair(SDStationMD5Request request, SDStationMD5Response response)
                 {
                     md5Request = request;
                     md5Response = response;
@@ -171,10 +171,10 @@ namespace SDGrabSharp.Common
 
             public class ScheduleResultPair
             {
-                public readonly SDScheduleRequest scheduleRequest;
-                public readonly SDScheduleResponse scheduleResponse;
+                public readonly SDStationScheduleRequest scheduleRequest;
+                public readonly SDStationScheduleResponse scheduleResponse;
 
-                public ScheduleResultPair(SDScheduleRequest request, SDScheduleResponse response)
+                public ScheduleResultPair(SDStationScheduleRequest request, SDStationScheduleResponse response)
                 {
                     scheduleRequest = request;
                     scheduleResponse = response;
@@ -184,10 +184,10 @@ namespace SDGrabSharp.Common
             public class ProgrammeResultPair
             {
                 public readonly string programmeRequest;
-                public readonly SDProgrammeResponse programmeResponse;
+                public readonly SDProgramResponse programmeResponse;
                 public readonly bool isCached;
 
-                public ProgrammeResultPair(string request, SDProgrammeResponse response, bool cached = false)
+                public ProgrammeResultPair(string request, SDProgramResponse response, bool cached = false)
                 {
                     programmeRequest = request;
                     programmeResponse = response;

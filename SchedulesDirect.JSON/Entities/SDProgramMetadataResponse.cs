@@ -5,10 +5,10 @@ namespace SchedulesDirect {
     /// Programme metadata (image information) for programmes response.
     /// </summary>
     [DataContract]
-    public class SDProgrammeMetadataResponse {
-        [DataMember]
-        public string programID;
-        [DataMember]
-        public SDImageData[] data;
+    public class SDProgramMetadataResponse {
+        [DataMember(Name = "programID")]
+        public string ProgramID;
+        [DataMember(Name = "data")]
+        public SDImageData[] Data;
     }
 }

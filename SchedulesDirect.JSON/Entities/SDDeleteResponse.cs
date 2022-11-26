@@ -6,16 +6,16 @@ namespace SchedulesDirect {
     /// Delete message response structure. Contains result and messages for this operation
     /// </summary>
     [DataContract]
-    public class SDDeleteResponse {
-        [DataMember]
-        public int code;
-        [DataMember]
-        public string response;
-        [DataMember]
-        public string serverID;
-        [DataMember]
-        public string message;
-        [DataMember]
-        public DateTime? datetime;
+    public class SDDeleteResponse : SDErrorResponse {
+        //[DataMember(Name = "code")]
+        //public int Code;
+        //[DataMember(Name = "response")]
+        //public string Response;
+        //[DataMember(Name = "serverID")]
+        //public string ServerID;
+        //[DataMember(Name = "message")]
+        //public string Message;
+        //[DataMember(Name = "datetime")]
+        //public DateTime? DateTime;
     }
 }

@@ -48,16 +48,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\SDErrorResponse.cs" />
+    <Compile Include="Entities\SDProgramMetadataResponse.cs" />
+    <Compile Include="Entities\SDProgramResponse.cs" />
+    <Compile Include="Entities\SDStationMD5Request.cs" />
+    <Compile Include="Entities\SDStationMD5Response.cs" />
+    <Compile Include="Entities\SDStationScheduleRequest.cs" />
+    <Compile Include="Entities\SDStationScheduleResponse.cs" />
+    <Compile Include="Exceptions\SDJSONException.cs" />
+    <Compile Include="Exceptions\SDJSONTokenResponseException.cs" />
+    <Compile Include="SDJSON_ErrorHandling.cs" />
     <Compile Include="Entities\SDImageData.cs" />
-    <Compile Include="Entities\SDProgrammeMetadataResponse.cs" />
     <Compile Include="Entities\SDStillRunningResponse.cs" />
     <Compile Include="Entities\SDDeleteResponse.cs" />
-    <Compile Include="Entities\SDMD5Response.cs" />
-    <Compile Include="Entities\SDMD5Request.cs" />
-    <Compile Include="Entities\SDScheduleResponse.cs" />
-    <Compile Include="Entities\SDScheduleRequest.cs" />
     <Compile Include="Entities\SDDescriptionResponse.cs" />
-    <Compile Include="Entities\SDProgrammeResponse.cs" />
     <Compile Include="Entities\SDPreviewLineupResponse.cs" />
     <Compile Include="Entities\SDGetLineupResponse.cs" />
     <Compile Include="Entities\SDLineupsResponse.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Net;
+using System.Runtime.Serialization;
 
 namespace SchedulesDirect {
     /// <summary>
@@ -6,14 +7,17 @@ namespace SchedulesDirect {
     /// </summary>
     [DataContract]
     public class SDTokenRequest {
-        [DataMember]
-        public string username;
-        [DataMember]
-        public string password;
+        [DataMember (Name = "username")]
+        public string Username;
+        [DataMember(Name = "password")]
+        public string Password;
 
-        public SDTokenRequest(string Username = "", string Password = "") {
-            username = Username;
-            password = Password;
+        public SDTokenRequest(NetworkCredential credential) : this(credential.UserName, credential.Password) {
+        }
+        public SDTokenRequest(string username = "", string password = "")
+        {
+            Username = username;
+            Password = password;
         }
     }
 }

@@ -6,16 +6,21 @@ namespace SchedulesDirect {
     /// Message response, contains result of authentication request
     /// </summary>
     [DataContract]
-    public class SDTokenResponse {
-        [DataMember]
-        public int code;
-        [DataMember]
-        public string message;
-        [DataMember]
-        public DateTime? datetime;
-        [DataMember]
-        public string token;
-        [DataMember]
-        public string response;
+    public class SDTokenResponse : SDErrorResponse {
+        //[DataMember(Name = "code")]
+        //public int Code;
+        //[DataMember(Name = "message")]
+        //public string Message;
+        //[DataMember(Name = "serverID")]
+        //public string ServerID;
+        //[DataMember(Name = "datetime")]
+        //public DateTime? Datetime;
+        [DataMember(Name = "token")]
+        public string Token;
+
+        public bool IsExpired
+        {
+            get => (!DateTime.HasValue || System.DateTime.Now > DateTime.Value.AddHours(24));
+        }
     }
 }

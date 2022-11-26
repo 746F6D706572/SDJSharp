@@ -6,11 +6,11 @@ namespace SchedulesDirect {
     /// </summary>
     [DataContract]
     public class SDAvailableResponse {
-        [DataMember]
-        public string type;
-        [DataMember]
-        public string description;
-        [DataMember]
-        public string uri;
+        [DataMember(Name = "type")]
+        public string Type;
+        [DataMember(Name = "description")]
+        public string Description;
+        [DataMember(Name = "uri")]
+        public string URI;
     }
 }

@@ -37,7 +37,7 @@ namespace SchedulesDirect.UIDemo
             var result = sd.GetStatus();
             if (result != null)
                 rtResult.Text =
-                    $"{result.systemStatus.FirstOrDefault().status}\r\n{result.systemStatus.FirstOrDefault().message}";
+                    $"{result.SystemStatus.FirstOrDefault().Status}\r\n{result.SystemStatus.FirstOrDefault().Message}";
         }
 
         private void btnServices_Click(object sender, EventArgs e)
@@ -55,7 +55,7 @@ namespace SchedulesDirect.UIDemo
             var serviceText = "Services:\r\n";
             foreach (var service in serviceList)
             {
-                serviceText += $"{service.type} - {service.description}: {service.uri}\r\n";
+                serviceText += $"{service.Type} - {service.Description}: {service.URI}\r\n";
             }
             rtResult.Text = serviceText;
         }
@@ -64,9 +64,9 @@ namespace SchedulesDirect.UIDemo
         {
             countryList = sd.GetCountries();
 
-            foreach (var continent in countryList.continents)
+            foreach (var continent in countryList.Continents)
             {
-                lbContinents.Items.Add(continent.continentname);
+                lbContinents.Items.Add(continent.ContinentName);
             }
 
             if (lbContinents.Items.Count > 0)
@@ -90,7 +90,7 @@ namespace SchedulesDirect.UIDemo
 
             foreach (var tx in txList)
             {
-                lbContinents.Items.Add($"{tx.transmitterArea}\t{tx.transmitterID}");
+                lbContinents.Items.Add($"{tx.TransmitterArea}\t{tx.TransmitterID}");
             }
             mode = 2;
         }
@@ -111,7 +111,7 @@ namespace SchedulesDirect.UIDemo
                 if (headEnd == null)
                     continue;
 
-                lbContinents.Items.Add($"{headEnd.headend}\t{headEnd.location}\t{headEnd.transport}");
+                lbContinents.Items.Add($"{headEnd.Headend}\t{headEnd.Location}\t{headEnd.Transport}");
             }
             mode = 3;
             if (lbContinents.Items.Count > 0)
@@ -140,11 +140,11 @@ namespace SchedulesDirect.UIDemo
 
         private void btnGetSchedule_Click(object sender, EventArgs e)
         {
-            var reqs = new List<SDScheduleRequest>();
-            var req = new SDScheduleRequest("45399", 
+            var reqs = new List<SDStationScheduleRequest>();
+            var req = new SDStationScheduleRequest("45399", 
                 new DateTime[] { DateTime.Parse("2016-11-29"), DateTime.Parse("2016-11-30") }.AsEnumerable());
             reqs.Add(req);
-            var req2 = new SDScheduleRequest("82547", 
+            var req2 = new SDStationScheduleRequest("82547", 
                 new DateTime[] { DateTime.Parse("2016-11-29"), DateTime.Parse("2016-11-30") }.AsEnumerable());
             reqs.Add(req2);
             var result = sd.GetSchedules(reqs.AsEnumerable());
@@ -160,8 +160,8 @@ namespace SchedulesDirect.UIDemo
 
         private void btnGetMD5_Click(object sender, EventArgs e)
         {
-            var reqs = new List<SDMD5Request>();
-            var req = new SDMD5Request("16689", 
+            var reqs = new List<SDStationMD5Request>();
+            var req = new SDStationMD5Request("16689", 
                 new DateTime[] { DateTime.Parse("2016-11-29"), DateTime.Parse("2016-11-30") }.AsEnumerable() );
             reqs.Add(req);
             var result = sd.GetMD5(reqs.AsEnumerable());
@@ -179,8 +179,8 @@ namespace SchedulesDirect.UIDemo
         {
             var id = headendline.Split('\t').FirstOrDefault();
             var lineups = (from headend in headEnds
-                           where headend.headend == id
-                           select headend.lineups).FirstOrDefault();
+                           where headend.Headend == id
+                           select headend.Lineups).FirstOrDefault();
 
             if (lineups == null)
                 return;
@@ -188,7 +188,7 @@ namespace SchedulesDirect.UIDemo
             lbCountries.Items.Clear();
             foreach (var lineup in lineups)
             {
-                lbCountries.Items.Add($"{lineup.lineup}\t{lineup.name}\t{lineup.uri}");
+                lbCountries.Items.Add($"{lineup.Lineup}\t{lineup.Name}\t{lineup.URI}");
             }
         }
 
@@ -198,9 +198,9 @@ namespace SchedulesDirect.UIDemo
             if (countryList == null)
                 return;
 
-            foreach (var country in countryList.continents.Where(cont => cont.continentname == continent).FirstOrDefault().countries)
+            foreach (var country in countryList.Continents.Where(cont => cont.ContinentName == continent).FirstOrDefault().Countries)
             {
-                lbCountries.Items.Add(country.fullName);
+                lbCountries.Items.Add(country.FullName);
             }
         }
 

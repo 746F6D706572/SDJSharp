@@ -36,19 +36,19 @@ namespace SDGrabSharp.UI
             {
                 var channelNum = string.Empty;
                 var logicalChannelNum = string.Empty;
-                var thisData = datacache.GetLineupData(sdJS, item.LineupID).stations.FirstOrDefault(line => line.stationID == item.SDStationID);
+                var thisData = datacache.GetLineupData(sdJS, item.LineupID).Stations.FirstOrDefault(line => line.StationID == item.SDStationID);
                 if (thisData == null)
                     continue;
 
-                var thisMap = datacache.GetLineupData(sdJS, item.LineupID).map.FirstOrDefault(line => line.stationID == item.SDStationID);
+                var thisMap = datacache.GetLineupData(sdJS, item.LineupID).Map.FirstOrDefault(line => line.StationID == item.SDStationID);
 
                 if (thisMap != null)
                 {
-                    channelNum = thisMap.channel;
-                    logicalChannelNum = thisMap.logicalChannelNumber;
+                    channelNum = thisMap.Channel;
+                    logicalChannelNum = thisMap.LogicalChannelNumber;
                 }
 
-                var thisLine = new string[] { item.LineupID, item.SDStationID, channelNum, logicalChannelNum, thisData.name, item.CustomTranslate };
+                var thisLine = new string[] { item.LineupID, item.SDStationID, channelNum, logicalChannelNum, thisData.Name, item.CustomTranslate };
                 dgCustomEntry.Rows.Add(thisLine);
             }
 

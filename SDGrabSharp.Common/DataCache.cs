@@ -167,30 +167,30 @@ namespace SDGrabSharp.Common
             cacheXml.AppendChild(rootCacheNode);
 
             // Write Countries
-            if (countryData != null && countryData.continents.Count > 0)
+            if (countryData != null && countryData.Continents.Count > 0)
             {
                 var countryRoot = cacheXml.CreateElement("CountryData");
                 AddCacheDateAttribute(countryRoot, countryData.cacheDate);
 
-                foreach (var continent in countryData.continents)
+                foreach (var continent in countryData.Continents)
                 {
                     var continentNode = cacheXml.CreateElement("continent");
-                    continentNode.SetAttribute("name", continent.continentname);
+                    continentNode.SetAttribute("name", continent.ContinentName);
                     AddCacheDateAttribute(continentNode, continent.cacheDate);
 
-                    foreach (var country in continent.countries)
+                    foreach (var country in continent.Countries)
                     {
                         var countryNode = cacheXml.CreateElement("country");
                         AddCacheDateAttribute(countryNode, country.cacheDate);
-                        if (country.shortName != null)
-                            countryNode.SetAttribute("shortname", country.shortName);
-                        if (country.postalCodeExample != null)
-                            countryNode.SetAttribute("postalCodeExample", country.postalCodeExample);
-                        if (country.postalCode != null)
-                            countryNode.SetAttribute("postalCode", country.postalCode);
-                        countryNode.SetAttribute("onePostalCode", country.onePostalCode ? "true" : "false");
-                        if (country.fullName != null)
-                            countryNode.InnerText = country.fullName;
+                        if (country.ShortName != null)
+                            countryNode.SetAttribute("shortname", country.ShortName);
+                        if (country.PostalCodeExample != null)
+                            countryNode.SetAttribute("postalCodeExample", country.PostalCodeExample);
+                        if (country.PostalCode != null)
+                            countryNode.SetAttribute("postalCode", country.PostalCode);
+                        countryNode.SetAttribute("onePostalCode", country.OnePostalCode ? "true" : "false");
+                        if (country.FullName != null)
+                            countryNode.InnerText = country.FullName;
 
                         continentNode.AppendChild(countryNode);
                     }
@@ -214,22 +214,22 @@ namespace SDGrabSharp.Common
                     {
                         var headEndNode = cacheXml.CreateElement("HeadEnd");
                         AddCacheDateAttribute(headEndNode, headEnd.cacheDate);
-                        if (headEnd.headend != null)
-                            headEndNode.SetAttribute("headend", headEnd.headend);
-                        if (headEnd.location != null)
-                            headEndNode.SetAttribute("location", headEnd.location);
-                        if (headEnd.transport != null)
-                            headEndNode.SetAttribute("transport", headEnd.transport);
-                        foreach (var lineup in headEnd.lineups)
+                        if (headEnd.Headend != null)
+                            headEndNode.SetAttribute("headend", headEnd.Headend);
+                        if (headEnd.Location != null)
+                            headEndNode.SetAttribute("location", headEnd.Location);
+                        if (headEnd.Transport != null)
+                            headEndNode.SetAttribute("transport", headEnd.Transport);
+                        foreach (var lineup in headEnd.Lineups)
                         {
                             var lineUpNode = cacheXml.CreateElement("LineUp");
                             AddCacheDateAttribute(lineUpNode, lineup.cacheDate);
-                            if (lineup.lineup != null)
-                                lineUpNode.SetAttribute("lineup", lineup.lineup);
-                            if (lineup.uri != null)
-                                lineUpNode.SetAttribute("uri", lineup.uri);
-                            if (lineup.name != null)
-                                lineUpNode.InnerText = lineup.name;
+                            if (lineup.Lineup != null)
+                                lineUpNode.SetAttribute("lineup", lineup.Lineup);
+                            if (lineup.URI != null)
+                                lineUpNode.SetAttribute("uri", lineup.URI);
+                            if (lineup.Name != null)
+                                lineUpNode.InnerText = lineup.Name;
 
                             headEndNode.AppendChild(lineUpNode);
                         }
@@ -254,9 +254,9 @@ namespace SDGrabSharp.Common
                     foreach (var channel in lineup.Value)
                     {
                         var channelNode = cacheXml.CreateElement("Channel");
-                        channelNode.SetAttribute("channel", channel.channel);
-                        channelNode.SetAttribute("callsign", channel.callsign);
-                        channelNode.InnerText = channel.name;
+                        channelNode.SetAttribute("channel", channel.Channel);
+                        channelNode.SetAttribute("callsign", channel.Callsign);
+                        channelNode.InnerText = channel.Name;
                         lineupNode.AppendChild(channelNode);
                     }
 
@@ -277,95 +277,95 @@ namespace SDGrabSharp.Common
                     stationMapNode.SetAttribute("lineup", stationMapCombo.Key);
 
                     // Maps first
-                    foreach (var map in stationMapCombo.Value.map)
+                    foreach (var map in stationMapCombo.Value.Map)
                     {
                         var mapNode = cacheXml.CreateElement("Map");
                         AddCacheDateAttribute(mapNode, map.cacheDate);
-                        mapNode.SetAttribute("atscMajor", map.atscMajor.ToString());
-                        mapNode.SetAttribute("atscMinor", map.atscMinor.ToString());
-                        if (map.channel != null)
-                            mapNode.SetAttribute("channel", map.channel);
-                        if (map.deliverySystem != null)
-                            mapNode.SetAttribute("deliverySystem", map.deliverySystem);
-                        if (map.fec != null)
-                            mapNode.SetAttribute("fec", map.fec);
-                        mapNode.SetAttribute("frequencyHz", map.frequencyHz.ToString());
-                        if (map.logicalChannelNumber != null)
-                            mapNode.SetAttribute("logicalChannelNumber", map.logicalChannelNumber);
-                        if (map.matchType != null)
-                            mapNode.SetAttribute("matchType", map.matchType);
-                        if (map.modulationSystem != null)
-                            mapNode.SetAttribute("modulationSystem", map.modulationSystem);
-                        if (map.networkID != null)
-                            mapNode.SetAttribute("networkID", map.networkID);
-                        if (map.polarization != null)
-                            mapNode.SetAttribute("polarization", map.polarization);
-                        if (map.providerCallsign != null)
-                            mapNode.SetAttribute("providerCallsign", map.providerCallsign);
-                        if (map.serviceID != null)
-                            mapNode.SetAttribute("serviceID", map.serviceID);
-                        if (map.stationID != null)
-                            mapNode.SetAttribute("stationID", map.stationID);
-                        mapNode.SetAttribute("symbolrate", map.symbolrate.ToString());
-                        if (map.transportID != null)
-                            mapNode.SetAttribute("transportID", map.transportID);
-                        mapNode.SetAttribute("uhfVhf", map.uhfVhf.ToString());
+                        mapNode.SetAttribute("atscMajor", map.AtscMajor.ToString());
+                        mapNode.SetAttribute("atscMinor", map.AtscMinor.ToString());
+                        if (map.Channel != null)
+                            mapNode.SetAttribute("channel", map.Channel);
+                        if (map.DeliverySystem != null)
+                            mapNode.SetAttribute("deliverySystem", map.DeliverySystem);
+                        if (map.Fec != null)
+                            mapNode.SetAttribute("fec", map.Fec);
+                        mapNode.SetAttribute("frequencyHz", map.FrequencyHz.ToString());
+                        if (map.LogicalChannelNumber != null)
+                            mapNode.SetAttribute("logicalChannelNumber", map.LogicalChannelNumber);
+                        if (map.MatchType != null)
+                            mapNode.SetAttribute("matchType", map.MatchType);
+                        if (map.ModulationSystem != null)
+                            mapNode.SetAttribute("modulationSystem", map.ModulationSystem);
+                        if (map.NetworkID != null)
+                            mapNode.SetAttribute("networkID", map.NetworkID);
+                        if (map.Polarization != null)
+                            mapNode.SetAttribute("polarization", map.Polarization);
+                        if (map.ProviderCallsign != null)
+                            mapNode.SetAttribute("providerCallsign", map.ProviderCallsign);
+                        if (map.ServiceID != null)
+                            mapNode.SetAttribute("serviceID", map.ServiceID);
+                        if (map.StationID != null)
+                            mapNode.SetAttribute("stationID", map.StationID);
+                        mapNode.SetAttribute("symbolrate", map.Symbolrate.ToString());
+                        if (map.TransportID != null)
+                            mapNode.SetAttribute("transportID", map.TransportID);
+                        mapNode.SetAttribute("uhfVhf", map.UhfVhf.ToString());
                         stationMapNode.AppendChild(mapNode);
                     }
 
                     // Station
-                    foreach (var station in stationMapCombo.Value.stations)
+                    foreach (var station in stationMapCombo.Value.Stations)
                     {
                         var stationNode = cacheXml.CreateElement("Station");
                         AddCacheDateAttribute(stationNode, station.cacheDate);
-                        stationNode.SetAttribute("affiliate", station.affiliate);
-                        stationNode.SetAttribute("id", station.stationID);
-                        stationNode.SetAttribute("callsign", station.callsign);
-                        stationNode.SetAttribute("name", station.name);
-                        foreach (var lang in station.broadcastLanguage)
+                        stationNode.SetAttribute("affiliate", station.Affiliate);
+                        stationNode.SetAttribute("id", station.StationID);
+                        stationNode.SetAttribute("callsign", station.Callsign);
+                        stationNode.SetAttribute("name", station.Name);
+                        foreach (var lang in station.BroadcastLanguage)
                         {
                             var languageNode = cacheXml.CreateElement("BroadcastLanguage");
                             languageNode.InnerText = lang;
                             stationNode.AppendChild(languageNode);
                         }
 
-                        foreach (var lang in station.descriptionLanguage)
+                        foreach (var lang in station.DescriptionLanguage)
                         {
                             var languageNode = cacheXml.CreateElement("DescriptionLanguage");
                             languageNode.InnerText = lang;
                             stationNode.AppendChild(languageNode);
                         }
 
-                        if (station.broadcaster != null)
+                        if (station.Broadcaster != null)
                         {
                             var broadcasterNode = cacheXml.CreateElement("Broadcaster");
-                            broadcasterNode.SetAttribute("city", station.broadcaster.city);
-                            broadcasterNode.SetAttribute("state", station.broadcaster.state);
-                            broadcasterNode.SetAttribute("postalcode", station.broadcaster.postalcode);
-                            broadcasterNode.SetAttribute("country", station.broadcaster.country);
+                            broadcasterNode.SetAttribute("city", station.Broadcaster.City);
+                            broadcasterNode.SetAttribute("state", station.Broadcaster.State);
+                            broadcasterNode.SetAttribute("postalcode", station.Broadcaster.Postalcode);
+                            broadcasterNode.SetAttribute("country", station.Broadcaster.Country);
                             stationNode.AppendChild(broadcasterNode);
                         }
 
-                        if (station.logo != null)
+                        if (station.Logo != null)
                         {
                             var logoNode = cacheXml.CreateElement("Logo");
-                            logoNode.SetAttribute("url", station.logo.URL);
-                            logoNode.SetAttribute("height", station.logo.height.ToString());
-                            logoNode.SetAttribute("width", station.logo.width.ToString());
-                            logoNode.SetAttribute("md5", station.logo.md5);
+                            logoNode.SetAttribute("url", station.Logo.URL);
+                            logoNode.SetAttribute("height", station.Logo.Height.ToString());
+                            logoNode.SetAttribute("width", station.Logo.Width.ToString());
+                            logoNode.SetAttribute("md5", station.Logo.MD5);
                             stationNode.AppendChild(logoNode);
                         }
                         stationMapNode.AppendChild(stationNode);
                     }
 
                     // Metadata
-                    if (stationMapCombo.Value.metadata != null)
+                    if (stationMapCombo.Value.Metadata != null)
                     {
                         var metaNode = cacheXml.CreateElement("MetaData");
-                        metaNode.SetAttribute("lineup", stationMapCombo.Value.metadata.lineup);
-                        metaNode.SetAttribute("modified", stationMapCombo.Value.metadata.modified.GetValueOrDefault().ToString("yyyyMMddHHmmss"));
-                        metaNode.SetAttribute("transport", stationMapCombo.Value.metadata.transport);
-                        metaNode.SetAttribute("modulation", stationMapCombo.Value.metadata.modulation);
+                        metaNode.SetAttribute("lineup", stationMapCombo.Value.Metadata.Lineup);
+                        metaNode.SetAttribute("modified", stationMapCombo.Value.Metadata.Modified.GetValueOrDefault().ToString("yyyyMMddHHmmss"));
+                        metaNode.SetAttribute("transport", stationMapCombo.Value.Metadata.Transport);
+                        metaNode.SetAttribute("modulation", stationMapCombo.Value.Metadata.Modulation);
                         stationMapNode.AppendChild(metaNode);
                     }
                     stationMapRoot.AppendChild(stationMapNode);
@@ -417,7 +417,7 @@ namespace SDGrabSharp.Common
                         var thisContinent = new SDCountries.Continent
                         {
                             cacheDate = GetCacheDate(continentNode),
-                            continentname = continentNode.Attributes["name"].Value
+                            ContinentName = continentNode.Attributes["name"].Value
                         };
 
                         if (validateCacheDate(thisContinent.cacheDate))
@@ -429,22 +429,22 @@ namespace SDGrabSharp.Common
                                 if (validateCacheDate(thisCountry.cacheDate))
                                 {
                                     if (countryNode.Attributes["shortname"] != null)
-                                        thisCountry.shortName = countryNode.Attributes["shortname"].Value;
+                                        thisCountry.ShortName = countryNode.Attributes["shortname"].Value;
                                     if (countryNode.Attributes["postalCodeExample"] != null)
-                                        thisCountry.postalCodeExample =
+                                        thisCountry.PostalCodeExample =
                                             countryNode.Attributes["postalCodeExample"].Value;
                                     if (countryNode.Attributes["postalCode"] != null)
-                                        thisCountry.postalCode = countryNode.Attributes["postalCode"].Value;
+                                        thisCountry.PostalCode = countryNode.Attributes["postalCode"].Value;
                                     if (countryNode.Attributes["onePostalCode"] != null)
-                                        thisCountry.onePostalCode =
+                                        thisCountry.OnePostalCode =
                                             countryNode.Attributes["onePostalCode"].Value == "true";
                                     if (countryNode.InnerText != null)
-                                        thisCountry.fullName = countryNode.InnerText;
-                                    thisContinent.countries.Add(thisCountry);
+                                        thisCountry.FullName = countryNode.InnerText;
+                                    thisContinent.Countries.Add(thisCountry);
                                 }
                             }
 
-                            countryData.continents.Add(thisContinent);
+                            countryData.Continents.Add(thisContinent);
                         }
                     }
                 }
@@ -465,26 +465,26 @@ namespace SDGrabSharp.Common
                         var thisHeadEnd = new SDHeadendsResponse {cacheDate = GetCacheDate(headEndNode)};
                         if (!validateCacheDate(thisHeadEnd.cacheDate)) continue;
                         if (headEndNode.Attributes["headend"] != null)
-                            thisHeadEnd.headend = headEndNode.Attributes["headend"].Value;
+                            thisHeadEnd.Headend = headEndNode.Attributes["headend"].Value;
                         if (headEndNode.Attributes["location"] != null)
-                            thisHeadEnd.location = headEndNode.Attributes["location"].Value;
+                            thisHeadEnd.Location = headEndNode.Attributes["location"].Value;
                         if (headEndNode.Attributes["transport"] != null)
-                            thisHeadEnd.transport = headEndNode.Attributes["transport"].Value;
+                            thisHeadEnd.Transport = headEndNode.Attributes["transport"].Value;
 
                         foreach (XmlNode lineUpNode in headEndNode.SelectNodes("LineUp"))
                         {
                             var thisLineup = new SDHeadendsResponse.SDLineup {cacheDate = GetCacheDate(lineUpNode)};
                             if (!validateCacheDate(thisLineup.cacheDate)) continue;
                             if (lineUpNode.Attributes["lineup"] != null)
-                                thisLineup.lineup = lineUpNode.Attributes["lineup"].Value;
+                                thisLineup.Lineup = lineUpNode.Attributes["lineup"].Value;
                             if (lineUpNode.Attributes["uri"] != null)
-                                thisLineup.uri = lineUpNode.Attributes["uri"].Value;
+                                thisLineup.URI = lineUpNode.Attributes["uri"].Value;
                             if (lineUpNode.InnerText != null)
-                                thisLineup.name = lineUpNode.InnerText;
+                                thisLineup.Name = lineUpNode.InnerText;
                             lineUpList.Add(thisLineup);
                         }
 
-                        thisHeadEnd.lineups = lineUpList.ToArray();
+                        thisHeadEnd.Lineups = lineUpList.ToArray();
                         headEnds.Add(thisHeadEnd);
                     }
 
@@ -503,9 +503,9 @@ namespace SDGrabSharp.Common
                         var channel = new SDPreviewLineupResponse {cacheDate = GetCacheDate(previewLineupNode)};
                         if (validateCacheDate(channel.cacheDate))
                         {
-                            channel.channel = channelNode?.Attributes["channel"]?.Value ?? string.Empty;
-                            channel.callsign = channelNode?.Attributes["callsign"]?.Value ?? string.Empty;
-                            channel.name = channelNode.InnerText ?? string.Empty;
+                            channel.Channel = channelNode?.Attributes["channel"]?.Value ?? string.Empty;
+                            channel.Callsign = channelNode?.Attributes["callsign"]?.Value ?? string.Empty;
+                            channel.Name = channelNode.InnerText ?? string.Empty;
                             previewList.Add(channel);
                         }
                     }
@@ -532,39 +532,39 @@ namespace SDGrabSharp.Common
                             if (validateCacheDate(thisMap.cacheDate))
                             {
                                 if (mapNode.Attributes["atscMajor"] != null)
-                                    thisMap.atscMajor = int.Parse(mapNode.Attributes["atscMajor"].Value);
+                                    thisMap.AtscMajor = int.Parse(mapNode.Attributes["atscMajor"].Value);
                                 if (mapNode.Attributes["atscMinor"] != null)
-                                    thisMap.atscMinor = int.Parse(mapNode.Attributes["atscMinor"].Value);
+                                    thisMap.AtscMinor = int.Parse(mapNode.Attributes["atscMinor"].Value);
                                 if (mapNode.Attributes["channel"] != null)
-                                    thisMap.channel = mapNode.Attributes["channel"].Value;
+                                    thisMap.Channel = mapNode.Attributes["channel"].Value;
                                 if (mapNode.Attributes["deliverySystem"] != null)
-                                    thisMap.deliverySystem = mapNode.Attributes["deliverySystem"].Value;
+                                    thisMap.DeliverySystem = mapNode.Attributes["deliverySystem"].Value;
                                 if (mapNode.Attributes["fec"] != null)
-                                    thisMap.fec = mapNode.Attributes["fec"].Value;
+                                    thisMap.Fec = mapNode.Attributes["fec"].Value;
                                 if (mapNode.Attributes["frequencyHz"] != null)
-                                    thisMap.frequencyHz = UInt64.Parse(mapNode.Attributes["frequencyHz"].Value);
+                                    thisMap.FrequencyHz = UInt64.Parse(mapNode.Attributes["frequencyHz"].Value);
                                 if (mapNode.Attributes["logicalChannelNumber"] != null)
-                                    thisMap.logicalChannelNumber = mapNode.Attributes["logicalChannelNumber"].Value;
+                                    thisMap.LogicalChannelNumber = mapNode.Attributes["logicalChannelNumber"].Value;
                                 if (mapNode.Attributes["matchType"] != null)
-                                    thisMap.matchType = mapNode.Attributes["matchType"].Value;
+                                    thisMap.MatchType = mapNode.Attributes["matchType"].Value;
                                 if (mapNode.Attributes["modulationSystem"] != null)
-                                    thisMap.modulationSystem = mapNode.Attributes["modulationSystem"].Value;
+                                    thisMap.ModulationSystem = mapNode.Attributes["modulationSystem"].Value;
                                 if (mapNode.Attributes["networkID"] != null)
-                                    thisMap.networkID = mapNode.Attributes["networkID"].Value;
+                                    thisMap.NetworkID = mapNode.Attributes["networkID"].Value;
                                 if (mapNode.Attributes["polarization"] != null)
-                                    thisMap.polarization = mapNode.Attributes["polarization"].Value;
+                                    thisMap.Polarization = mapNode.Attributes["polarization"].Value;
                                 if (mapNode.Attributes["providerCallsign"] != null)
-                                    thisMap.providerCallsign = mapNode.Attributes["providerCallsign"].Value;
+                                    thisMap.ProviderCallsign = mapNode.Attributes["providerCallsign"].Value;
                                 if (mapNode.Attributes["serviceID"] != null)
-                                    thisMap.serviceID = mapNode.Attributes["serviceID"].Value;
+                                    thisMap.ServiceID = mapNode.Attributes["serviceID"].Value;
                                 if (mapNode.Attributes["stationID"] != null)
-                                    thisMap.stationID = mapNode.Attributes["stationID"].Value;
+                                    thisMap.StationID = mapNode.Attributes["stationID"].Value;
                                 if (mapNode.Attributes["symbolrate"] != null)
-                                    thisMap.symbolrate = int.Parse(mapNode.Attributes["symbolrate"].Value);
+                                    thisMap.Symbolrate = int.Parse(mapNode.Attributes["symbolrate"].Value);
                                 if (mapNode.Attributes["transportID"] != null)
-                                    thisMap.transportID = mapNode.Attributes["transportID"].Value;
+                                    thisMap.TransportID = mapNode.Attributes["transportID"].Value;
                                 if (mapNode.Attributes["uhfVhf"] != null)
-                                    thisMap.uhfVhf = int.Parse(mapNode.Attributes["uhfVhf"].Value);
+                                    thisMap.UhfVhf = int.Parse(mapNode.Attributes["uhfVhf"].Value);
                                 mapList.Add(thisMap);
                             }
                         }
@@ -581,47 +581,47 @@ namespace SDGrabSharp.Common
                             if (validateCacheDate(thisStation.cacheDate))
                             {
                                 if (stationNode.Attributes["affiliate"] != null)
-                                    thisStation.affiliate = stationNode.Attributes["affiliate"].Value;
+                                    thisStation.Affiliate = stationNode.Attributes["affiliate"].Value;
                                 if (stationNode.Attributes["id"] != null)
-                                    thisStation.stationID = stationNode.Attributes["id"].Value;
+                                    thisStation.StationID = stationNode.Attributes["id"].Value;
                                 if (stationNode.Attributes["callsign"] != null)
-                                    thisStation.callsign = stationNode.Attributes["callsign"].Value;
+                                    thisStation.Callsign = stationNode.Attributes["callsign"].Value;
                                 if (stationNode.Attributes["name"] != null)
-                                    thisStation.name = stationNode.Attributes["name"].Value;
+                                    thisStation.Name = stationNode.Attributes["name"].Value;
 
                                 var broadcastLanguages = new List<string>();
                                 foreach (XmlNode broadcastLanguageNode in stationNode.SelectNodes("BroadcastLanguage"))
                                     broadcastLanguages.Add(broadcastLanguageNode.InnerText);
-                                thisStation.broadcastLanguage = broadcastLanguages.ToArray();
+                                thisStation.BroadcastLanguage = broadcastLanguages.ToArray();
 
                                 var descriptionLanguages = new List<string>();
                                 foreach (XmlNode descriptionLanguageNode in stationNode.SelectNodes(
                                     "DescriptionLanguage"))
                                     descriptionLanguages.Add(descriptionLanguageNode.InnerText);
-                                thisStation.descriptionLanguage = descriptionLanguages.ToArray();
+                                thisStation.DescriptionLanguage = descriptionLanguages.ToArray();
 
                                 var broadcasterNode = stationNode.SelectSingleNode("Broadcaster");
                                 if (broadcasterNode != null)
                                 {
-                                    thisStation.broadcaster =
+                                    thisStation.Broadcaster =
                                         new SDGetLineupResponse.SDLineupStation.SDStationBroadcaster
                                         {
-                                            city = broadcasterNode.Attributes["city"].Value,
-                                            state = broadcasterNode.Attributes["state"].Value,
-                                            postalcode = broadcasterNode.Attributes["postalcode"].Value,
-                                            country = broadcasterNode.Attributes["country"].Value
+                                            City = broadcasterNode.Attributes["city"].Value,
+                                            State = broadcasterNode.Attributes["state"].Value,
+                                            Postalcode = broadcasterNode.Attributes["postalcode"].Value,
+                                            Country = broadcasterNode.Attributes["country"].Value
                                         };
                                 }
 
                                 var logoNode = stationNode.SelectSingleNode("Logo");
                                 if (logoNode != null)
                                 {
-                                    thisStation.logo = new SDGetLineupResponse.SDLineupStation.SDStationLogo
+                                    thisStation.Logo = new SDGetLineupResponse.SDLineupStation.SDStationLogo
                                     {
                                         URL = logoNode.Attributes["url"].Value,
-                                        height = int.Parse(logoNode.Attributes["height"].Value),
-                                        width = int.Parse(logoNode.Attributes["width"].Value),
-                                        md5 = logoNode.Attributes["md5"].Value
+                                        Height = int.Parse(logoNode.Attributes["height"].Value),
+                                        Width = int.Parse(logoNode.Attributes["width"].Value),
+                                        MD5 = logoNode.Attributes["md5"].Value
                                     };
                                 }
 
@@ -629,21 +629,21 @@ namespace SDGrabSharp.Common
                             }
                         }
 
-                        thisStationMap.map = mapList.ToArray();
-                        thisStationMap.stations = stationList.ToArray();
+                        thisStationMap.Map = mapList.ToArray();
+                        thisStationMap.Stations = stationList.ToArray();
 
                         // Metadata
                         var metadataNode = lineUpNode.SelectSingleNode("MetaData");
                         if (metadataNode != null)
                         {
-                            thisStationMap.metadata = new SDGetLineupResponse.SDLineupMetadata
+                            thisStationMap.Metadata = new SDGetLineupResponse.SDLineupMetadata
                             {
-                                lineup = metadataNode.Attributes["lineup"].Value,
-                                modified = DateTime.ParseExact(
+                                Lineup = metadataNode.Attributes["lineup"].Value,
+                                Modified = DateTime.ParseExact(
                                     metadataNode.Attributes["modified"].Value, "yyyyMMddHHmmss",
                                     CultureInfo.InvariantCulture),
-                                transport = metadataNode.Attributes["transport"].Value,
-                                modulation = metadataNode.Attributes["modulation"].Value
+                                Transport = metadataNode.Attributes["transport"].Value,
+                                Modulation = metadataNode.Attributes["modulation"].Value
                             };
                         }
 

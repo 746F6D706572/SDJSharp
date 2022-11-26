@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace SchedulesDirect {
     /// <summary>
@@ -6,23 +7,24 @@ namespace SchedulesDirect {
     /// </summary>
     [DataContract]
     public class SDDescriptionResponse {
-        [DataMember]
-        public string episodeID;
-        [DataMember]
-        public SDProgrammeDescription episodeDescription;
-
-        public SDDescriptionResponse() {
-            episodeDescription = new SDProgrammeDescription();
-        }
-
+        [DataMember(Name = "episodeID")]
+        public string EpisodeID;
+		
+		[DataMember(Name = "episodeDescription")]
+		public SDProgrammeDescription EpisodeDescription;
+		
         [DataContract]
         public class SDProgrammeDescription {
-            [DataMember]
-            public int code;
-            [DataMember]
-            public string description100;
-            [DataMember]
-            public string description1000;
+			[DataMember(Name = "code")]
+            public int Code;
+            [DataMember(Name = "description100")]
+            public string Description100;
+            [DataMember(Name = "description1000")]
+            public string Description1000;
         }
-    }
+		
+		public SDDescriptionResponse() {
+            EpisodeDescription = new SDProgrammeDescription();
+        }
+	}
 }

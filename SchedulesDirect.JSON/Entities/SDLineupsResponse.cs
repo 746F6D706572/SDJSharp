@@ -6,28 +6,28 @@ namespace SchedulesDirect {
     /// Lineups command response. Provides list of lineups available.
     /// </summary>
     [DataContract]
-    public class SDLineupsResponse {
-        [DataMember]
-        public int code;
-        [DataMember]
-        public string serverID;
-        [DataMember]
-        public DateTime? datetime;
-        [DataMember]
-        public SDLineups[] lineups;
+    public class SDLineupsResponse : SDErrorResponse {
+        //[DataMember(Name = "code")]
+        //public int Code;
+        //[DataMember(Name = "serverID")]
+        //public string ServerID;
+        //[DataMember(Name = "datetime")]
+        //public DateTime? DateTime;
+        [DataMember(Name = "lineups")]
+        public SDLineups[] Lineups;
 
         [DataContract]
         public class SDLineups {
-            [DataMember]
-            public string lineup;
-            [DataMember]
-            public string name;
-            [DataMember]
-            public string transport;
-            [DataMember]
-            public string location;
-            [DataMember]
-            public string uri;
+            [DataMember(Name = "lineup")]
+            public string Lineup;
+            [DataMember(Name = "name")]
+            public string Name;
+            [DataMember(Name = "transport")]
+            public string Transport;
+            [DataMember(Name = "location")]
+            public string Location;
+            [DataMember(Name = "uri")]
+            public string URI;
         }
     }
 }

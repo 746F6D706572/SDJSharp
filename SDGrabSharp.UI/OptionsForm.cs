@@ -60,10 +60,10 @@ namespace SDGrabSharp.UI
             localTranslate = config.TranslationMatrix;
             var token = string.Empty;
             loggedIn = false;
-            if (cache.tokenData != null && cache.tokenData.token != string.Empty)
+            if (cache.tokenData != null && cache.tokenData.Token != string.Empty)
             {
                 loggedIn = true;
-                token = cache.tokenData.token;
+                token = cache.tokenData.Token;
             }
 
             sdJS = new SDJson("SDGrabSharp/1.0", token);
@@ -195,7 +195,7 @@ namespace SDGrabSharp.UI
             if (username != string.Empty && password != string.Empty)
             {
                 var loginResponse = sdJS.Login(username, password, isHash);
-                if (loginResponse != null && loginResponse.code == 0)
+                if (loginResponse != null && loginResponse.Code == 0)
                 {
                     loggedIn = true;
                     cache.tokenData = loginResponse;
@@ -295,20 +295,20 @@ namespace SDGrabSharp.UI
 
             if (loggedIn)
             {
-                if (statusResponse?.lineups != null)
+                if (statusResponse?.Lineups != null)
                 {
                     // Remove translations for lineups that don't exist
-                    validateTranslate(localTranslate, statusResponse.lineups.Select(line => line.lineup).ToArray());
+                    validateTranslate(localTranslate, statusResponse.Lineups.Select(line => line.Lineup).ToArray());
 
                     lvAccountLineups.Items.Clear();
-                    foreach (var lineup in statusResponse.lineups)
+                    foreach (var lineup in statusResponse.Lineups)
                     {
-                        var item = new ListViewItem {Text = lineup.lineup};
-                        item.SubItems.Add(lineup.modified.GetValueOrDefault().Date.ToShortDateString());
+                        var item = new ListViewItem {Text = lineup.Lineup};
+                        item.SubItems.Add(lineup.Modified.GetValueOrDefault().Date.ToShortDateString());
                         lvAccountLineups.Items.Add(item);
                     }
 
-                    updateLineupsStatus(statusResponse.lineups.Length, statusResponse.account.maxLineups, changesRemain);
+                    updateLineupsStatus(statusResponse.Lineups.Length, statusResponse.Account.MaxLineups, changesRemain);
                     sdJS.ClearErrors();
                     return true;
                 }
@@ -325,14 +325,14 @@ namespace SDGrabSharp.UI
             tvCountries.Nodes.Clear();
             var countryData = cache.GetCountryData(sdJS);
 
-            foreach (var continent in countryData.continents)
+            foreach (var continent in countryData.Continents)
             {
-                var thisContinent = tvCountries.Nodes.Add(continent.continentname);
-                foreach (var country in continent.countries)
+                var thisContinent = tvCountries.Nodes.Add(continent.ContinentName);
+                foreach (var country in continent.Countries)
                 {
-                    var thisCountry = thisContinent.Nodes.Add(country.shortName, country.fullName);
+                    var thisCountry = thisContinent.Nodes.Add(country.ShortName, country.FullName);
 
-                    foreach (var thisPostCode in cache.headendData.Where(line => line.Key.Split(',')[0] == country.shortName).Select(line => line.Key.Split(',')[1]))
+                    foreach (var thisPostCode in cache.headendData.Where(line => line.Key.Split(',')[0] == country.ShortName).Select(line => line.Key.Split(',')[1]))
                         thisCountry.Nodes.Add(thisPostCode, thisPostCode);
                 }
             }
@@ -359,10 +359,10 @@ namespace SDGrabSharp.UI
 
                 if (map != null)
                 {
-                    foreach (var station in map.stations)
+                    foreach (var station in map.Stations)
                     {
-                        var item = new ListViewItem {Text = station.stationID};
-                        item.SubItems.Add(station.name);
+                        var item = new ListViewItem {Text = station.StationID};
+                        item.SubItems.Add(station.Name);
                         lvStations.Items.Add(item);
                     }
                 }
@@ -415,10 +415,10 @@ namespace SDGrabSharp.UI
 
                 foreach (var headend in headendData)
                 {
-                    var node = tvHeadends.Nodes.Add($"{headend.location}/{headend.headend}");
+                    var node = tvHeadends.Nodes.Add($"{headend.Location}/{headend.Headend}");
 
-                    foreach (var lineup in headend.lineups)
-                        node.Nodes.Add(lineup.lineup, lineup.name);
+                    foreach (var lineup in headend.Lineups)
+                        node.Nodes.Add(lineup.Lineup, lineup.Name);
                 }
             }
         }
@@ -441,8 +441,8 @@ namespace SDGrabSharp.UI
                 foreach (var channel in previewResponse)
                 {
                     var item = new ListViewItem();
-                    item.Text = $"P{channel.channel}/{channel.callsign}";
-                    item.SubItems.Add(channel.name);
+                    item.Text = $"P{channel.Channel}/{channel.Callsign}";
+                    item.SubItems.Add(channel.Name);
                     lvStations.Items.Add(item);
                 }
                 lvStations.EndUpdate();
@@ -460,8 +460,8 @@ namespace SDGrabSharp.UI
             if (tvHeadends.SelectedNode != null)
             {
                 var result = sdJS.AddLineup(tvHeadends.SelectedNode.Name);
-                if (result != null && result.code == 0)
-                    changesRemain = int.Parse(result.changesRemaining);
+                if (result != null && result.Code == 0)
+                    changesRemain = int.Parse(result.ChangesRemaining);
 
                 doStatus();
             }
@@ -473,9 +473,9 @@ namespace SDGrabSharp.UI
             {
                 var lineupID = lvAccountLineups.SelectedItems[0].SubItems[0].Text;
                 var response = sdJS.DeleteLineup(lineupID);
-                if (response != null && response.code == 0)
+                if (response != null && response.Code == 0)
                 {
-                    changesRemain = int.Parse(response.changesRemaining);
+                    changesRemain = int.Parse(response.ChangesRemaining);
 
                     // Delete all translations for this lineup
                     var lineupItems = localTranslate.Where(line => line.Value.LineupID == lineupID).ToArray();
@@ -491,7 +491,7 @@ namespace SDGrabSharp.UI
         {
             loggedIn = false;
             if (cache.tokenData != null)
-                cache.tokenData.token = string.Empty;
+                cache.tokenData.Token = string.Empty;
 
             updateControls(loggedIn);
         }
@@ -508,7 +508,8 @@ namespace SDGrabSharp.UI
             config.PersistantCache = ckPersistentCache.Checked;
             config.SDUsername = txtLogin.Text;
             if (txtPassword.Text != passwordHashEntry)
-                config.SDPasswordHash = sdJS.hashPassword(txtPassword.Text);
+                //config.SDPasswordHash = sdJS.HashPassword(txtPassword.Text);
+                config.SDPasswordHash = SDJson.HashPassword(txtPassword.Text);
 
             // Remove invalid channels from matrix
             var results = validateMatrix(localTranslate);
@@ -529,16 +530,16 @@ namespace SDGrabSharp.UI
             foreach(var lineup in lineUps)
             {
                 var linupData = cache.GetLineupData(sdJS, lineup);
-                if (linupData?.stations != null)
-                    stationLookup.Add(lineup, linupData.stations);
+                if (linupData?.Stations != null)
+                    stationLookup.Add(lineup, linupData.Stations);
             }
 
             var toDelete = new List<string>();
             var removedNames = new List<string>();
             foreach (var trItem in matrix)
             {
-                var channel = stationLookup[trItem.Value.LineupID].FirstOrDefault(row => row.stationID.Equals(trItem.Value.SDStationID));
-                //var channel = cache.GetLineupData(sdJS, trItem.Value.LineupID).stations.FirstOrDefault(row => row.stationID == trItem.Value.SDStationID);
+                var channel = stationLookup[trItem.Value.LineupID].FirstOrDefault(row => row.StationID.Equals(trItem.Value.SDStationID));
+                //var channel = cache.GetLineupData(sdJS, trItem.Value.LineupID).stations.FirstOrDefault(row => row.StationID == trItem.Value.SDStationID);
                 if (channel == null)
                 {
                     toDelete.Add(trItem.Key);
@@ -579,10 +580,10 @@ namespace SDGrabSharp.UI
 
             var status = sdJS.GetStatus();
             cbLineup.Items.Clear();
-            if (status.lineups.Length > 0)
+            if (status.Lineups.Length > 0)
             {
-                foreach (var lineup in status.lineups)
-                    cbLineup.Items.Add(lineup.lineup);
+                foreach (var lineup in status.Lineups)
+                    cbLineup.Items.Add(lineup.Lineup);
 
                 cbLineup.SelectedIndex = 0;
             }
@@ -629,22 +630,22 @@ namespace SDGrabSharp.UI
 
                 if (string.IsNullOrEmpty(localItem.displayNameHelper))
                 {
-                    var station = cache.GetLineupData(sdJS, localItem.LineupID).stations.FirstOrDefault(thisstation => thisstation.stationID == localItem.SDStationID);
+                    var station = cache.GetLineupData(sdJS, localItem.LineupID).Stations.FirstOrDefault(thisstation => thisstation.StationID == localItem.SDStationID);
                     if (station != null)
                     {
                         switch (localItem.FieldMode)
                         {
                             case Config.XmlTVTranslation.TranslateField.StationID:
-                                localItem.displayNameHelper = station.stationID;
+                                localItem.displayNameHelper = station.StationID;
                                 break;
                             case Config.XmlTVTranslation.TranslateField.StationAffiliate:
-                                localItem.displayNameHelper = station.affiliate;
+                                localItem.displayNameHelper = station.Affiliate;
                                 break;
                             case Config.XmlTVTranslation.TranslateField.StationCallsign:
-                                localItem.displayNameHelper = station.callsign;
+                                localItem.displayNameHelper = station.Callsign;
                                 break;
                             case Config.XmlTVTranslation.TranslateField.StationName:
-                                localItem.displayNameHelper = station.name;
+                                localItem.displayNameHelper = station.Name;
                                 break;
                             case Config.XmlTVTranslation.TranslateField.Custom:
                                 localItem.displayNameHelper = localItem.CustomTranslate;
@@ -680,17 +681,17 @@ namespace SDGrabSharp.UI
             lvAvailableChans.BeginUpdate();
             lvAvailableChans.Items.Clear();
             var originalPosition = 0;
-            foreach (var station in stationInfo.stations)
+            foreach (var station in stationInfo.Stations)
             {
-                var thisInfo = new ChannelLocationInfo(originalPosition, (string)cbLineup.SelectedItem, station.stationID, false);
+                var thisInfo = new ChannelLocationInfo(originalPosition, (string)cbLineup.SelectedItem, station.StationID, false);
 
-                if (filter == string.Empty || station.name.ToLower().Contains(filter.ToLower()))
+                if (filter == string.Empty || station.Name.ToLower().Contains(filter.ToLower()))
                 {
                     // Only add if not in added list
-                    var item = new ListViewItem {Text = station.stationID};
-                    if (!localTranslate.ContainsKey(station.stationID) || localTranslate[station.stationID].isDeleted)
+                    var item = new ListViewItem {Text = station.StationID};
+                    if (!localTranslate.ContainsKey(station.StationID) || localTranslate[station.StationID].isDeleted)
                     {
-                        item.SubItems.Add(station.name);
+                        item.SubItems.Add(station.Name);
                         lvAvailableChans.Items.Add(item);
                         thisInfo.isAvailable = true;
                     }
@@ -735,21 +736,21 @@ namespace SDGrabSharp.UI
 
             localItem.FieldMode = mode;
 
-            var station = cache.GetLineupData(sdJS, localItem.LineupID).stations.FirstOrDefault(line => line.stationID == localItem.SDStationID);
+            var station = cache.GetLineupData(sdJS, localItem.LineupID).Stations.FirstOrDefault(line => line.StationID == localItem.SDStationID);
 
             switch (localItem.FieldMode)
             {
                 case Config.XmlTVTranslation.TranslateField.StationID:
-                    localItem.displayNameHelper = station.stationID;
+                    localItem.displayNameHelper = station.StationID;
                     break;
                 case Config.XmlTVTranslation.TranslateField.StationAffiliate:
-                    localItem.displayNameHelper = station.affiliate;
+                    localItem.displayNameHelper = station.Affiliate;
                     break;
                 case Config.XmlTVTranslation.TranslateField.StationCallsign:
-                    localItem.displayNameHelper = station.callsign;
+                    localItem.displayNameHelper = station.Callsign;
                     break;
                 case Config.XmlTVTranslation.TranslateField.StationName:
-                    localItem.displayNameHelper = station.name;
+                    localItem.displayNameHelper = station.Name;
                     break;
                 case Config.XmlTVTranslation.TranslateField.Custom:
                     localItem.displayNameHelper = localItem.CustomTranslate;
@@ -769,22 +770,22 @@ namespace SDGrabSharp.UI
             if (lineupID == null)
                 return null;
 
-            var stationInfo = cache.GetLineupData(sdJS, lineupID).stations.FirstOrDefault(station => station.stationID == stationID);
+            var stationInfo = cache.GetLineupData(sdJS, lineupID).Stations.FirstOrDefault(station => station.StationID == stationID);
 
             if (stationInfo != null)
             {
-                txtStationID.Text = stationInfo.stationID;
-                txtName.Text = stationInfo.name;
-                txtAffiliate.Text = stationInfo.affiliate;
-                txtCallsign.Text = stationInfo.callsign;
+                txtStationID.Text = stationInfo.StationID;
+                txtName.Text = stationInfo.Name;
+                txtAffiliate.Text = stationInfo.Affiliate;
+                txtCallsign.Text = stationInfo.Callsign;
             }
 
-            var mapInfo = cache.GetLineupData(sdJS, lineupID).map.FirstOrDefault(map => map.stationID == stationID);
+            var mapInfo = cache.GetLineupData(sdJS, lineupID).Map.FirstOrDefault(map => map.StationID == stationID);
 
             if (mapInfo != null)
             {
-                txtLogicalChannel.Text = mapInfo.logicalChannelNumber;
-                txtChannelNum.Text = mapInfo.channel;
+                txtLogicalChannel.Text = mapInfo.LogicalChannelNumber;
+                txtChannelNum.Text = mapInfo.Channel;
             }
 
             // Extra for added list
@@ -822,19 +823,19 @@ namespace SDGrabSharp.UI
                         break;
                     case Config.XmlTVTranslation.TranslateField.StationAffiliate:
                         rdAffiliate.Checked = true;
-                        newName = stationInfo.affiliate;
+                        newName = stationInfo.Affiliate;
                         break;
                     case Config.XmlTVTranslation.TranslateField.StationCallsign:
                         rdCallsign.Checked = true;
-                        newName = stationInfo.callsign;
+                        newName = stationInfo.Callsign;
                         break;
                     case Config.XmlTVTranslation.TranslateField.StationID:
                         rdStation.Checked = true;
-                        newName = stationInfo.stationID;
+                        newName = stationInfo.StationID;
                         break;
                     case Config.XmlTVTranslation.TranslateField.StationName:
                         rdName.Checked = true;
-                        newName = stationInfo.name;
+                        newName = stationInfo.Name;
                         break;
                 }
                 autoControlUpdate = false;
@@ -923,30 +924,30 @@ namespace SDGrabSharp.UI
             else
             {
                 // Get SD Data for this station
-                var stationData = cache.GetLineupData(sdJS, (string)cbLineup.SelectedItem).stations.FirstOrDefault(station => station.stationID == item.Text);
+                var stationData = cache.GetLineupData(sdJS, (string)cbLineup.SelectedItem).Stations.FirstOrDefault(station => station.StationID == item.Text);
                 if (stationData == null)
                     return;
 
                 localItem = new Config.XmlTVTranslation
                 {
                     LineupID = (string) cbLineup.SelectedItem,
-                    SDStationID = stationData.stationID,
+                    SDStationID = stationData.StationID,
                     isDeleted = false,
                     FieldMode = config.defaultTranslateMode
                 };
                 switch(localItem.FieldMode)
                 {
                     case Config.XmlTVTranslation.TranslateField.StationID:
-                        localItem.displayNameHelper = stationData.stationID;
+                        localItem.displayNameHelper = stationData.StationID;
                         break;
                     case Config.XmlTVTranslation.TranslateField.StationAffiliate:
-                        localItem.displayNameHelper = stationData.affiliate;
+                        localItem.displayNameHelper = stationData.Affiliate;
                         break;
                     case Config.XmlTVTranslation.TranslateField.StationCallsign:
-                        localItem.displayNameHelper = stationData.callsign;
+                        localItem.displayNameHelper = stationData.Callsign;
                         break;
                     case Config.XmlTVTranslation.TranslateField.StationName:
-                        localItem.displayNameHelper = stationData.name;
+                        localItem.displayNameHelper = stationData.Name;
                         break;
                     case Config.XmlTVTranslation.TranslateField.Custom:
                         localItem.displayNameHelper = txtCustom.Text;
@@ -977,20 +978,20 @@ namespace SDGrabSharp.UI
             if (customText != string.Empty)
                 localItem.CustomTranslate = customText;
 
-            var stationData = cache.GetLineupData(sdJS, (string)cbLineup.SelectedItem).stations.FirstOrDefault(station => station.stationID == item.Text);
+            var stationData = cache.GetLineupData(sdJS, (string)cbLineup.SelectedItem).Stations.FirstOrDefault(station => station.StationID == item.Text);
             switch (localItem.FieldMode)
             {
                 case Config.XmlTVTranslation.TranslateField.StationID:
-                    localItem.displayNameHelper = stationData.stationID;
+                    localItem.displayNameHelper = stationData.StationID;
                     break;
                 case Config.XmlTVTranslation.TranslateField.StationAffiliate:
-                    localItem.displayNameHelper = stationData.affiliate;
+                    localItem.displayNameHelper = stationData.Affiliate;
                     break;
                 case Config.XmlTVTranslation.TranslateField.StationCallsign:
-                    localItem.displayNameHelper = stationData.callsign;
+                    localItem.displayNameHelper = stationData.Callsign;
                     break;
                 case Config.XmlTVTranslation.TranslateField.StationName:
-                    localItem.displayNameHelper = stationData.name;
+                    localItem.displayNameHelper = stationData.Name;
                     break;
                 case Config.XmlTVTranslation.TranslateField.Custom:
                     localItem.displayNameHelper = txtCustom.Text;
@@ -1220,10 +1221,10 @@ namespace SDGrabSharp.UI
                 }
 
                 chan.Tag = null;
-                var stationInfo = cache.GetLineupData(sdJS, (string)cbLineup.SelectedItem).stations.FirstOrDefault(line => line.stationID == chan.Text);
+                var stationInfo = cache.GetLineupData(sdJS, (string)cbLineup.SelectedItem).Stations.FirstOrDefault(line => line.StationID == chan.Text);
 
                 if (stationInfo != null)
-                    chan.SubItems[1].Text = stationInfo.name;
+                    chan.SubItems[1].Text = stationInfo.Name;
 
                 // If the nearest remaining neighbour was found, insert before it, else it goes to the end.
                 if (nextLocation != null)
@@ -1277,10 +1278,10 @@ namespace SDGrabSharp.UI
                 }
 
                 chan.Tag = lineup;
-                var stationInfo = cache.GetLineupData(sdJS, (string)cbLineup.SelectedItem).stations.FirstOrDefault(line => line.stationID == chan.Text);
+                var stationInfo = cache.GetLineupData(sdJS, (string)cbLineup.SelectedItem).Stations.FirstOrDefault(line => line.StationID == chan.Text);
 
                 if (stationInfo != null)
-                    chan.SubItems[1].Text = stationInfo.name;
+                    chan.SubItems[1].Text = stationInfo.Name;
 
                 // If the nearest remaining neighbour was found, insert before it, else it goes to the end.
                 if (nextLocation != null)

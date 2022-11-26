@@ -6,11 +6,11 @@ namespace SchedulesDirect {
     /// </summary>
     [DataContract]
     public class SDPreviewLineupResponse : SDCachedElement {
-        [DataMember]
-        public string channel;
-        [DataMember]
-        public string name;
-        [DataMember]
-        public string callsign;
+        [DataMember(Name = "channel")]
+        public string Channel;
+        [DataMember(Name = "name")]
+        public string Name;
+        [DataMember(Name = "callsign")]
+        public string Callsign;
     }
 }
