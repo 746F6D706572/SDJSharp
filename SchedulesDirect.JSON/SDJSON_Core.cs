@@ -9,16 +9,16 @@ using System.Web.Script.Serialization;
 namespace SchedulesDirect {
     public class SDJsonCore : SDJsonErrorHandling {
 
-#if DEBUG
-        private static readonly string DEBUG_FILE = "SDGrabSharp.debug.txt";
-#endif
+//#if DEBUG
+//        private static readonly string DEBUG_FILE = "SDGrabSharp.debug.txt";
+//#endif
 
-#if DEBUG
-        private static void DebugLog(string debugText) {
-            string logStamp = DateTime.Now.ToString("O");
-            File.AppendAllText(DEBUG_FILE, $"{logStamp}: {debugText}");
-        }
-#endif
+//#if DEBUG
+//        private static void DebugLog(string debugText) {
+//            string logStamp = DateTime.Now.ToString("O");
+//            File.AppendAllText(DEBUG_FILE, $"{logStamp}: {debugText}");
+//        }
+//#endif
 
         private static readonly string urlBase = "https://json.schedulesdirect.org/20141201/";
         private static readonly string userAgentDefault = "SDJSharp JSON C# Library/1.0 (https://github.com/M0OPK/SDJSharp)";
@@ -66,14 +66,14 @@ namespace SchedulesDirect {
         // Perform post action and parse response via JSON serializer to known object type
         protected static V PostJSON<V, T>(string command, T obj, string token = "", WebHeaderCollection headers = null) {
             var requestString = CreateJSONstring(obj);
-#if DEBUG
-            DebugLog($"JSON Post [{command}] Request: {requestString}{Environment.NewLine}");
-#endif
+//#if DEBUG
+//            DebugLog($"JSON Post [{command}] Request: {requestString}{Environment.NewLine}");
+//#endif
 			var response = WebPost(command, requestString, token, headers);
 			var result = ParseJSON<V>(response);
-#if DEBUG
-            DebugLog($"JSON Post Response: {response}{Environment.NewLine}");
-#endif
+//#if DEBUG
+//            DebugLog($"JSON Post Response: {response}{Environment.NewLine}");
+//#endif
 			return result;
 		}
 		
